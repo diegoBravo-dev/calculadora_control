@@ -28,10 +28,15 @@ tss = input("Ingresa el valor de tss: ");
 chi = input("Ingresa el valor de chi: ");
 [sd, sigma, wd] = raicesDeseadas(tss, chi);
 
-%% PROBANDO CON PI
-tipo= input("Ingresa el tipo de control: ");
-zc2 = input("Ingresa el valor deseado de zc2: ");
-[numC, denC, kp, Ti, ~] = controlador(num, den, tipo, zc2, sd, sigma, wd);
-num2 = conv(num, numC);
-den2 = conv(den, denC);
-graficar_step(num2, den2, tfinal);
+conf = 1;
+
+%% PROBANDO CONTROLADORES
+while(conf == 1)
+    tipo= input("Ingresa el tipo de control: ");
+    zc2 = input("Ingresa el valor deseado de zc2: ");
+    [numC, denC, kp, Ti, ~] = controlador(num, den, tipo, zc2, sd, sigma, wd);
+    num2 = conv(num, numC);
+    den2 = conv(den, denC);
+    graficar_step(num2, den2, tfinal);
+    conf = input("¿Desea continuar? (1: sí, 0: no): ");
+end
