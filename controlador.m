@@ -16,7 +16,7 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
             denC = [1 0];
         case 'PD'
             numC2 = 1;
-            denC = [1 0];
+            denC = 1;
         case 'PID'
             numC2 = [1 zc2];
             denC = [1 0];

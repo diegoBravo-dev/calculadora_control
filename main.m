@@ -37,6 +37,8 @@ while(conf == 1)
     [numC, denC, kp, Ti, ~] = controlador(num, den, tipo, zc2, sd, sigma, wd);
     num2 = conv(num, numC);
     den2 = conv(den, denC);
+    % Display the new transfer function
+    disp("Nuevo sistema: Numerador = " + mat2str(num2) + ", Denominador = " + mat2str(den2));
     graficar_step(num2, den2, tfinal);
     conf = input("¿Desea continuar? (1: sí, 0: no): ");
 end
