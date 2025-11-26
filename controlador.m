@@ -42,6 +42,8 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
         pc=sigma+(wd/tand(beta_b));
         numC1 = [1 zc2];
         denC = [1 pc];
+    else
+        numC1 = 1;
     end 
 
     %% CONDICIÓN DE MAGNITUD

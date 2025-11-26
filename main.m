@@ -27,7 +27,7 @@ graficar_step(num, den, tfinal);
 tss = input("Ingresa el valor de tss: ");
 chi = input("Ingresa el valor de chi: ");
 [sd, sigma, wd] = raicesDeseadas(tss, chi);
-
+disp("Valor de sd: " + mat2str(sd));
 conf = 1;
 
 %% PROBANDO CONTROLADORES
