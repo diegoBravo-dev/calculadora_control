@@ -32,6 +32,7 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
         phi = (2*k+1)*180 - rad2deg(angle(polyval(numC2, sd))) - rad2deg(angle(polyval(num, sd))) ...
             + rad2deg(angle(polyval(denC, sd))) + rad2deg(angle(polyval(den, sd)));
         zc1 = sigma + wd/tand(phi);
+        disp("Valor de zc1: " + mat2str(zc1));
         numC1 = [1 zc1];
     elseif strcmp(tipo, 'ATRASO') || strcmp(tipo, 'ADELANTO')
         k = 0;
@@ -56,23 +57,28 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
     switch tipo
         case 'P'
             kp = K;
+            disp("kp: " + mat2str(kp));
         case 'I'
             ki = K;
+            disp("ki: " + mat2str(ki));
         case 'PI'
             kp = K;
             Ti = 1/zc1;
+            disp("Ti: " + mat2str(Ti) + "\tkp: " + mat2str(kp));
         case 'PD'
             Td = 1/zc1;
             kd = K;
             kp = K/Td;
+            disp("Td: " + mat2str(Td) + "\tkd: " + mat2str(kd) + "\tkp: " + mat2str(kp));
         case 'PID'
             Td = 1/(zc1 + zc2);
             Ti = (zc1 + zc2)/(zc1*zc2);
             kd = K;
             kp = kd/Td;
+            disp("Td: " + mat2str(Td) + "\tTi: " + mat2str(Ti) + "\tkd: " + mat2str(kd) + "\tkp: " + mat2str(kp));
         case 'ADELANTO'
-            alpha = zc2/pc;
+            disp("Valor de alpha: " + mat2str(zc2/pc));
         case 'ATRASO'
-            alpha = zc2/pc;
+            disp("Valor de alpha: " + mat2str(zc2/pc));
     end
 end
