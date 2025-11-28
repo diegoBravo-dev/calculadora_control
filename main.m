@@ -1,7 +1,7 @@
 clc;
 clear;
 
-%% DATOS DE LA PLANTA
+%% Datos de la planta 
 n = input("ingresa el tamaño de columnas del vector num: ");
 num = zeros(1, n);
 
@@ -23,18 +23,22 @@ end
 tfinal = input("ingresa el step: "); %NÚMERO LIMITE DE LA ENTRADA
 graficar_step(num, den, tfinal);
 
-%% RAÍCES DESEADAS
+%% Raices deseadas
 tss = input("Ingresa el valor de tss: ");
 chi = input("Ingresa el valor de chi: ");
 [sd, sigma, wd] = raicesDeseadas(tss, chi);
 disp("Valor de sd: " + mat2str(sd));
+ess_actual = calcularEss(num, den);
+disp("Valor del error en estado estable actual: " + mat2str(ess_actual));
 conf = 1;
 
 %% PROBANDO CONTROLADORES
 while(conf == 1)
     tipo= input("Ingresa el tipo de control: ");
     zc2 = input("Ingresa el valor deseado de zc2: ");
-    [numC, denC, kp, Ti, ~] = controlador(num, den, tipo, zc2, sd, sigma, wd);
+    modo = input("Ingresa el modo del amortiguador, si se eligió (1: Parche, 0: Normal/No aplica): ");
+    ess_deseado = input("Ingresa el valor del error en estado estable deseado: ")
+    [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, wd, modo, ess_deseado);
     num2 = conv(num, numC);
     den2 = conv(den, denC);
     % Display the new transfer function
