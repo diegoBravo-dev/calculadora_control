@@ -1,4 +1,4 @@
-function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, wd)
+function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, wd, modo, ess_deseado)
     Ti = 0;
     Td = 0;
     kp = 0;
@@ -27,20 +27,27 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
     end
 
     %% CONDICIÓN DE ÁNGULO
-    if strcmp(tipo, 'PI') || strcmp(tipo, 'PD') || strcmp(tipo, 'PID')
+    if (strcmp(tipo, 'PI') || strcmp(tipo, 'PD') || strcmp(tipo, 'PID')) && modo == 0
         k = 0;
         phi = (2*k+1)*180 - rad2deg(angle(polyval(numC2, sd))) - rad2deg(angle(polyval(num, sd))) ...
             + rad2deg(angle(polyval(denC, sd))) + rad2deg(angle(polyval(den, sd)));
         zc1 = sigma + wd/tand(phi);
         disp("Valor de zc1: " + mat2str(zc1));
         numC1 = [1 zc1];
-    elseif strcmp(tipo, 'ATRASO') || strcmp(tipo, 'ADELANTO')
+    elseif (strcmp(tipo, 'ATRASO') || strcmp(tipo, 'ADELANTO')) && modo == 0
         k = 0;
         phi = (2*k+1)*180 - rad2deg(angle(polyval(numC2, sd))) - rad2deg(angle(polyval(num, sd))) ...
              + rad2deg(angle(polyval(den, sd)));
         alpha_b = rad2deg(angle(polyval([1 zc2], sd)));
         beta_b = alpha_b - phi;
         pc=sigma+(wd/tand(beta_b));
+        numC1 = [1 zc2];
+        denC = [1 pc];
+    elseif (strcmp(tipo, 'ATRASO') || strcmp(tipo, 'ADELANTO')) && modo == 1
+        kmc = (1/ess_deseado) - 1;
+        k_i = num(end)/den(end);
+        alpha = kmc/k_i;
+        pc = zc2 / alpha;
         numC1 = [1 zc2];
         denC = [1 pc];
     else
@@ -77,8 +84,8 @@ function [numC, denC, kp, Ti, Td] = controlador(num, den, tipo, zc2, sd, sigma, 
             kp = kd/Td;
             disp("Td: " + mat2str(Td) + "\tTi: " + mat2str(Ti) + "\tkd: " + mat2str(kd) + "\tkp: " + mat2str(kp));
         case 'ADELANTO'
-            disp("Valor de alpha: " + mat2str(zc2/pc));
+            disp("Valor de alpha: " + mat2str(alpha));
         case 'ATRASO'
-            disp("Valor de alpha: " + mat2str(zc2/pc));
+            disp("Valor de alpha: " + mat2str(alpha));
     end
 end
